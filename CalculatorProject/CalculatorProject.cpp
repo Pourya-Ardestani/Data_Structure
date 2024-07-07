@@ -8,13 +8,15 @@ using namespace std;
 #define MAX 100
 
 template <class T>
-class Stack
+struct Stack
 {
-private:
-	int top;
+	Stack* top;
+	Stack* next;
+	T value;
+	/// 
+	/// 
+	/// 
 
-public:
-	char st[MAX];
 	Stack();
 	void push(T);
 	T pop();
@@ -28,63 +30,42 @@ public:
 template <class T>
 Stack<T>::Stack()
 {
-	top = -1;
+	top = NULL;
+	next = NULL;
 }
 
 
 template <class T>
 void Stack<T>::push(T new_item)
 {
-	if (top >= MAX - 1)
-	{
-		std::cout << "Stack Overflow";
-	}
-	else
-	{
-		st[top] = new_item;
-		top++;
-	}
+	Stack* newStack = new Stack();
+	newStack->value = new_item;
+	newStack->next = top; 
+	top = newStack;
+
 }
 
 
 template <class T>
 T Stack<T>::pop()
 {
-	if (top < 0)
-	{
-		std::cout << "error there is no element to pop ";
-		return 0;
-	}
-	else
-	{
-		T x = st[top];
-		top--;
-		return x;
-	}
+    T x = top->value;
+    top = top->next;
+    return x;
+    ////////////////khodam
 }
 
 
 template <class T>
 T Stack<T>::peek()
 {
-	if (top < 0) {
-		std::cout << "Stack is Empty";
-		return 0;
-	}
-	else
-	{
-		return st[top];
-	}
+    return top->value;
 }
 
 template <class T>
 bool Stack<T>::isEmpty()
 {
-	if (top < 0)
-	{
-		return true;
-	}
-	return false;
+    return (top == NULL);
 }
 
 
