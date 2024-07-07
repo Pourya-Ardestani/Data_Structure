@@ -1,2 +1,5 @@
 ﻿  CalculatorProject.cpp
+  Stack.cpp
+  Generating Code...
+C:\Users\Apple\OneDrive\Documents\GitHub\Data_Structure\CalculatorProject\CalculatorProject.cpp(225): warning C4715: 'Priority': not all control paths return a value
   CalculatorProject.vcxproj -> C:\Users\Apple\OneDrive\Documents\GitHub\Data_Structure\CalculatorProject\x64\Debug\CalculatorProject.exe
