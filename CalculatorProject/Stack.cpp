@@ -1,13 +1,17 @@
 #include "Stack.h"
 #include <iostream>
-Stack::Stack()
+
+template <class T>
+Stack<T>::Stack()
 {
 	top = -1;
 }
 
-bool Stack::push(char new_item)
+
+template <class T>
+bool Stack<T>::push(T new_item)
 {
-	if (top >= MAX-1)
+	if (top >= MAX - 1)
 	{
 		std::cout << "Stack Overflow";
 		return false;
@@ -18,7 +22,10 @@ bool Stack::push(char new_item)
 		top++;
 	}
 }
-char Stack::pop()
+
+
+template <class T>
+T Stack<T>::pop()
 {
 	if (top < 0)
 	{
@@ -27,11 +34,14 @@ char Stack::pop()
 	}
 	else
 	{
-		char x = st[--top];
+		T x = st[--top];
 		return x;
 	}
 }
-char Stack::peek()
+
+
+template <class T>
+T Stack<T>::peek()
 {
 	if (top < 0) {
 		std::cout << "Stack is Empty";
@@ -42,7 +52,9 @@ char Stack::peek()
 		return st[top];
 	}
 }
-bool Stack::isEmpty()
+
+template <class T>
+bool Stack<T>::isEmpty()
 {
 	if (top < 0)
 	{
@@ -50,3 +62,4 @@ bool Stack::isEmpty()
 	}
 	return false;
 }
+
