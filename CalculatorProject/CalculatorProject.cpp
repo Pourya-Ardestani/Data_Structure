@@ -12,7 +12,16 @@ string fixString(string s); // add prototype and parameters
 
 //////////////////////////
 
-int Priority(char);
+int Priority(char c)
+{
+    if (c == '-' or c == '+')
+        return 0;
+    if (c == '/' or c == '*')
+        return 1;
+    if (c == '^')
+        return 2;
+}
+
 
 
 int calculator(char ch, int a, int b)
@@ -51,9 +60,7 @@ int main()
     //+++++++++++++++++++++++++++++
     s = fixString(s);
     cout << s; 
- /*   for (char i; i < s.size(); i++)
-      cout << s[i];*/
-
+ 
 
 }
 
@@ -82,9 +89,6 @@ string fixString(string s)// add prototype and parameters
             s.erase(s.begin() + i), i--;
         }
 
-    //detect minus
-    if (s[0] == '-')
-        s.insert(s.begin(), '0');
 
     // REMOVE EQUAL SIGN if (it was in last )
     if (s[s.size() - 1] == '=')
@@ -93,6 +97,8 @@ string fixString(string s)// add prototype and parameters
     Stack<double> values;
     Stack<char> ops;
     string result;
+
+
     for (size_t i = 0; i < s.size(); ++i) 
     {
         if (s[i] == '(') 
@@ -111,13 +117,15 @@ string fixString(string s)// add prototype and parameters
             values.push(number);
             --i; // Adjust the index after the inner loop
         }
-
+  
         else if (s[i] == ')')
         {
             ops.pop();
         }
 
     }
+
+
     // detect exeption ()()
     if (!ops.isEmpty())
     {
@@ -126,9 +134,9 @@ string fixString(string s)// add prototype and parameters
     }
 
 
+    // Handle multiple signs    
     for (size_t i = 0; i < s.size(); ++i) {
 
-        // Handle multiple signs
         if (s[i] == '+' || s[i] == '-') {
             int minus = 0;
             size_t j = i;
@@ -186,20 +194,34 @@ string fixString(string s)// add prototype and parameters
             continue;
         }
 
+        // handle the last operator exept = if exist
+        if (isOperator(s.back()))
+        {
+            result  = "ERROR !! there was a extra operator in the end  ";
+            return result ;
+        }
+
+
         result += s[i];
     }
 
 
     // manfi daron parantez
     for (int i = 0; i < s.size(); i++)
+    {
         if ((isdigit(s[i]) && s[i + 1] == '(') || (s[i] == ')' && s[i + 1] == '(') || (s[i] == ')' && isdigit(s[i + 1])))
             s.insert(s.begin() + i + 1, '*');
+    }
+
 
     // zarb beiin parantez
     for (int i = 0; i < s.size(); i++)
+    {
         if ((isdigit(s[i]) && s[i + 1] == '(') || (s[i] == ')' && s[i + 1] == '(') || (s[i] == ')' && isdigit(s[i + 1])))
             s.insert(s.begin() + i + 1, '*');
-    //result
+    }
+
+    //result 
     if (s[0] == '-')
         s.insert(s.begin(), '0');
 
@@ -211,13 +233,3 @@ string fixString(string s)// add prototype and parameters
 
 }
 
-
-int Priority(char c)
-{
-    if (c == '-' or c == '+')
-        return 0;
-    if (c == '/' or c == '*')
-        return 1;
-    if (c == '^')
-        return 2;
-}
