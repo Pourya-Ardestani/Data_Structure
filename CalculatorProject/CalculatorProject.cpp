@@ -1,17 +1,53 @@
 #include <iostream>
 #include <string>
 #include <cmath>
+#include <chrono>
+#include <thread>
+#include <stdlib.h>
 #include "Stack.h"
 using namespace std; 
 
+#define SCREEN_CLEAN_TIME 8
 
+int calculator(char, int, int);
 string fixString(string s); // add prototype and 
 string convertToPostfix(string );
 void paranthes(string*, Stack<char>*);
 double calculate_postfix(string);
 //////////////////////////
 
+ 
+int main()
+{
+    bool end = false;
+    string s;
+    while (!end)
+    {
+        cout << "Enter an new expression: (or Enter 'E' to End the proggram ): ";
+        getline(cin, s);
+        s = fixString(s);
 
+        if (s[0] == 'E' || s[0] == 'e')
+            end = true;
+        else if (s[0] == 'T')
+            cout << s <<"\n\n\n";
+        else
+        {
+            cout << "\n after fix : " << s;
+            string postfix;
+            postfix = convertToPostfix(s);
+
+            cout << "\n after convert : " << postfix;
+            double Answer = calculate_postfix(postfix);
+            cout << "\n" << " Answer : " << Answer << "\n";
+            this_thread::sleep_for(chrono::seconds(SCREEN_CLEAN_TIME));
+            system("CLS");
+        }
+
+    }
+
+    return 0;
+}
 
 
 int calculator(char ch, int a, int b)
@@ -30,27 +66,6 @@ int calculator(char ch, int a, int b)
     default:return -1;
     }
 }
-
-
-// 
-int main()
-{
-    string s;
-    cout << "Enter an expression: ";
-    getline(cin,s);
-  
-    s = fixString(s);
-    cout << "\n after fix : " <<  s;
-    string postfix;
-    postfix = convertToPostfix(s);
-
-    cout << "\n after convert : "<< postfix;
-    double Answer = calculate_postfix(postfix);
-    cout << "/n" << "Answer : " << Answer << "/n";
-    
-    return 0;
-}
-
 
 int priority(char c)
 {
@@ -93,12 +108,11 @@ string fixString(string s)// add prototype and parameters
         }
 
 
-    // REMOVE EQUAL SIGN if (it was in last )
+    // remove equal sign if (it was in last )
     if (s[s.size() - 1] == '=')
         s.erase(s.end() - 1);
 
-    Stack<double> values;
-    Stack<char> ops;
+    Stack<char> parentheses;
     string result;
 
 
@@ -106,35 +120,23 @@ string fixString(string s)// add prototype and parameters
     {
         if (s[i] == '(') 
         {
-            ops.push(s[i]);
+            parentheses.push(s[i]);
         }
-        else if (isdigit(s[i])) 
-        {
-            size_t start = i;
-            while (i < s.length() && (isdigit(s[i]) || s[i] == '.')) 
-            {
-                ++i;
-            }
-            string numberStr = s.substr(start, i - start);
-            double number = stod(numberStr);
-            values.push(number);
-            --i; // Adjust the index after the inner loop
-        }
-  
         else if (s[i] == ')')
         {
-            ops.pop();
+            if (parentheses.isEmpty())// detect exeption ()() for starting parentheses
+            {
+                result = "There is an Error!!! detected Error for not existing starting <<(>> parenthese ";
+                return result;
+            }
+            parentheses.pop();
         }
-
-        
-
     }
 
-
-    // detect exeption ()()
-    if (!ops.isEmpty())
+    // detect exeption ()() for end parentheses
+    if (!parentheses.isEmpty())
     {
-        result = "ERORR!!!" ;
+        result = "There is an Error!!! detected Error for not existing ending <<)>> parenthese ";
         return result; 
     }
 
@@ -198,7 +200,7 @@ string fixString(string s)// add prototype and parameters
         // handle the last operator exept = if exist
         if (isOperator(s.back()))
         {
-            result  = "ERROR !! there was a extra operator in the end  ";
+            result  = "There is an ERROR !! there was a extra operator in the end  ";
             return result ;
         }
 
@@ -298,9 +300,7 @@ string convertToPostfix(string str)
         }
     return postfix;
 }
-
-
-
+// final calculation :
 double calculate_postfix(string s)
 {
     Stack<double> values;
