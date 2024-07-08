@@ -5,8 +5,7 @@
 using namespace std; 
 
 
-string fixString(string s); // add prototype and parameters 
-void AddElement(string*, Stack<char>* , int);
+string fixString(string s); // add prototype and 
 string convertToPostfix(string );
 void paranthes(string*, Stack<char>*);
 
@@ -47,12 +46,13 @@ int main()
 
     cout << "\n after convert : "<< postfix;
 
+    
+
 }
 
 
 int priority(char c)
 {
-
     int r;
     switch (c)
     {
@@ -124,6 +124,9 @@ string fixString(string s)// add prototype and parameters
         {
             ops.pop();
         }
+
+        //////////////////////////////////////test values 
+        
 
     }
 
@@ -237,12 +240,23 @@ string convertToPostfix(string str)
     string postfix;
     for (size_t i = 0; i < str.size(); ++i)
     {
+        
         if (isdigit(str[i]))
         {
-            postfix+=str[i];
-        } 
-        // age  addae add toye string 
+            size_t start = i;
+            while (i < str.length() && (isdigit(str[i]) || str[i] == '.'))
+            {
+                ++i;
+            }
+            string numberStr = str.substr(start, i - start);
+            //double number = stod(numberStr);
+            postfix += numberStr;
+            postfix += ' ';
+            --i; // Adjust the index after the inner loop
+        }
+    
 
+        // age  addae add toye string 
         else if (str[i] == '(')
         {
             operators.push(str[i]);
@@ -254,7 +268,8 @@ string convertToPostfix(string str)
         {
             while (operators.peek() != '(')
             {
-                postfix += operators.pop();
+                postfix += operators.pop() ;
+                postfix += ' ';
             }
             operators.pop();
         }//age ) ta vaqti be ( naresidim az stack kharej mikonim toye string 
@@ -269,26 +284,18 @@ string convertToPostfix(string str)
                 //AddElement(&postfix, &operators, newpri);
                 while (!operators.isEmpty() && newpri <= inStack_pri) 
                 {
-                    postfix += operators.pop();
+                    postfix += operators.pop() ;
+                    postfix += ' ';
                 }
             }
             operators.push(str[i]);
         }
     }
-    //#TODO dar akhar harchi to stack hast bayad khaly she to post fix
-    //AddElement(&postfix,& operators );
+
         while (!operators.isEmpty())
         {
             postfix += operators.pop();
+            postfix += ' ';
         }
     return postfix;
 }
-
-//void AddElement(string * post ,Stack<char> *stack )
-//{
-//    while (!stack->isEmpty() &&  n >= stack->peek())
-//    {
-//        *post += stack->pop();
-//    }
-//
-//}
