@@ -93,13 +93,11 @@ string fixString(string s)// add prototype and parameters
     Stack<double> values;
     Stack<char> ops;
     string result;
-
     for (size_t i = 0; i < s.size(); ++i) 
     {
         if (s[i] == '(') 
         {
             ops.push(s[i]);
-
         }
         else if (isdigit(s[i])) 
         {
