@@ -8,7 +8,7 @@ using namespace std;
 string fixString(string s); // add prototype and 
 string convertToPostfix(string );
 void paranthes(string*, Stack<char>*);
-
+double calculate_postfix(string);
 //////////////////////////
 
 
@@ -45,9 +45,10 @@ int main()
     postfix = convertToPostfix(s);
 
     cout << "\n after convert : "<< postfix;
-
+    double Answer = calculate_postfix(postfix);
+    cout << "/n" << "Answer : " << Answer << "/n";
     
-
+    return 0;
 }
 
 
@@ -125,7 +126,6 @@ string fixString(string s)// add prototype and parameters
             ops.pop();
         }
 
-        //////////////////////////////////////test values 
         
 
     }
@@ -239,8 +239,7 @@ string convertToPostfix(string str)
     Stack<char> operators;
     string postfix;
     for (size_t i = 0; i < str.size(); ++i)
-    {
-        
+    { 
         if (isdigit(str[i]))
         {
             size_t start = i;
@@ -298,4 +297,46 @@ string convertToPostfix(string str)
             postfix += ' ';
         }
     return postfix;
+}
+
+
+
+double calculate_postfix(string s)
+{
+    Stack<double> values;
+
+    for (int i = 0; i < s.size(); i++)
+    {
+        if (s[i] == ' ')
+        {
+            continue;
+        }
+        else if (isdigit(s[i]))
+        {
+            size_t start = i;
+            while (i < s.length() && (isdigit(s[i]) || s[i] == '.'))
+            {
+                ++i;
+            }
+            string numberStr = s.substr(start, i - start);
+            double number = stod(numberStr);
+            values.push(number);
+            --i; // Adjust the index after the inner loop
+        }
+        else if (isOperator(s[i]))
+        {
+            //x-y
+            double y = values.pop();
+            double x = values.pop();
+            double answer = calculator(s[i],x, y);
+            
+            values.push(answer);
+        }
+        else
+        {
+            break; 
+        }
+    }
+    return values.pop();
+
 }
