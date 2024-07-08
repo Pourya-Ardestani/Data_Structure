@@ -6,21 +6,12 @@ using namespace std;
 
 
 string fixString(string s); // add prototype and parameters 
-
-
-
+void AddElement(string*, Stack<char>* , int);
+string convertToPostfix(string );
+void paranthes(string*, Stack<char>*);
 
 //////////////////////////
 
-int Priority(char c)
-{
-    if (c == '-' or c == '+')
-        return 0;
-    if (c == '/' or c == '*')
-        return 1;
-    if (c == '^')
-        return 2;
-}
 
 
 
@@ -53,17 +44,36 @@ int main()
     stack1.push('1');
     stack1.push('2');
     stack1.push('3');
-    while (!stack1.isEmpty())
-    {
-        cout << stack1.pop();
-    }*/
     //+++++++++++++++++++++++++++++
+    }*/
     s = fixString(s);
-    cout << s; 
- 
+    cout << "\n after fix : " <<  s;
+    string postfix;
+    postfix = convertToPostfix(s);
 
+    cout << "\n after convert : "<< postfix;
+    
+    
+    
 }
 
+
+int priority(char c)
+{
+
+    int r;
+    switch (c)
+    {
+    case'-': 
+    case'+':r = 1; break;
+    case'/':
+    case'*':r = 2; break;
+    case'^':r = 3; break;
+
+    default:return-1;
+    }
+    return r;
+}
 
 bool myLetter(char c)
 {
@@ -74,7 +84,7 @@ bool myLetter(char c)
 
 bool isOperator(char c)
 {
-    if (c == '/' or c == '*' or c == '+' or c == '-' or c == '^' or c == '(' or c == ')' or c == '!' or c == '%' or c == '=')
+    if (c == '/' or c == '*' or c == '+' or c == '-' or c == '^' or c == '=')
         return true;
     return false;
 }
@@ -233,3 +243,65 @@ string fixString(string s)// add prototype and parameters
 
 }
 
+string convertToPostfix(string str)
+{
+    Stack<char> operators;
+    string postfix;
+    for (size_t i = 0; i < str.size(); ++i)
+    {
+        if (isdigit(str[i]))
+        {
+            postfix+=str[i];
+        } 
+        // age  addae add toye string 
+
+        else if (str[i] == '(')
+        {
+            operators.push(str[i]);
+        }
+        // age ( add toye stack  
+
+
+        else if(str[i] == ')')
+        {
+            while (operators.peek() != ')')
+            {
+                cout << 's';
+                postfix += operators.pop();
+            }
+            operators.pop();
+        }//age ) ta vaqti be ( naresidim az stack kharej mikonim toye string 
+
+        else if (isOperator(str[i]))
+        {
+            int newpri = priority(str[i]);
+            int inStack_pri = priority(operators.peek());
+
+            if(newpri <=inStack_pri)
+            {   
+                //AddElement(&postfix, &operators, newpri);
+                while (!operators.isEmpty() && newpri <= inStack_pri) 
+                {
+                    postfix += operators.pop();
+                }
+            }
+            operators.push(str[i]);
+        }
+    }
+    //#TODO dar akhar harchi to stack hast bayad khaly she to post fix
+    //AddElement(&postfix,& operators );
+        while (!operators.isEmpty())
+        {
+            postfix += operators.pop();
+        }
+    return postfix;
+}
+
+//void AddElement(string * post ,Stack<char> *stack )
+//{
+//    while (!stack->isEmpty() &&  n >= stack->peek())
+//    {
+//        *post += stack->pop();
+//    }
+//
+//}

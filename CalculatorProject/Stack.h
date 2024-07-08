@@ -40,9 +40,13 @@ void Stack<T>::push(T new_item)
 template <class T>
 T Stack<T>::pop()
 {
-	T x = top->value;
-	top = top->next;
-	return x;
+	if (top != NULL)
+	{	
+		T x = top->value;
+		top = top->next;
+		return x;
+	}
+
 	////////////////khodam
 }
 
@@ -50,7 +54,11 @@ T Stack<T>::pop()
 template <class T>
 T Stack<T>::peek()
 {
-	return top->value;
+	if (top != NULL)
+	{
+		return top->value;
+	}
+	return 'E';
 }
 
 template <class T>
