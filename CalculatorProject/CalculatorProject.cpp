@@ -39,22 +39,14 @@ int main()
     string s;
     cout << "Enter an expression: ";
     getline(cin,s);
-    ////////////////////////////test Stack
-    /*Stack<char> stack1;
-    stack1.push('1');
-    stack1.push('2');
-    stack1.push('3');
-    //+++++++++++++++++++++++++++++
-    }*/
+  
     s = fixString(s);
     cout << "\n after fix : " <<  s;
     string postfix;
     postfix = convertToPostfix(s);
 
     cout << "\n after convert : "<< postfix;
-    
-    
-    
+
 }
 
 
@@ -176,10 +168,6 @@ string fixString(string s)// add prototype and parameters
             }
             continue;
         }
-        //for (size_t i = 0; i < s.size(); ++i) 
-        //{
-        //    //if (isdigit(s[i]))
-        //}
 
 
         // Insert multiplication sign where necessary
@@ -264,9 +252,8 @@ string convertToPostfix(string str)
 
         else if(str[i] == ')')
         {
-            while (operators.peek() != ')')
+            while (operators.peek() != '(')
             {
-                cout << 's';
                 postfix += operators.pop();
             }
             operators.pop();
