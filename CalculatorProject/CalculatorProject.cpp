@@ -10,32 +10,32 @@ using namespace std;
 #define SCREEN_CLEAN_TIME 8
 
 int calculator(char, int, int);
-string fixString(string s); // add prototype and 
+string fixString(string s);  
 string convertToPostfix(string );
 void paranthes(string*, Stack<char>*);
 double calculate_postfix(string);
-//////////////////////////
+
 
  
 int main()
 {
     bool end = false;
-    string s;
+    string equation;
     while (!end)
     {
         cout << "Enter an new expression: (or Enter 'E' to End the proggram ): ";
-        getline(cin, s);
-        s = fixString(s);
+        getline(cin, equation);
+        equation = fixString(equation);
 
-        if (s[0] == 'E' || s[0] == 'e')
+        if (equation[0] == 'E' || equation[0] == 'e')
             end = true;
-        else if (s[0] == 'T')
-            cout << s <<"\n\n\n";
+        else if (equation[0] == 'T')
+            cout << equation <<"\n\n\n";
         else
         {
-            cout << "\n after fix : " << s;
+            cout << "\n after fix : " << equation;
             string postfix;
-            postfix = convertToPostfix(s);
+            postfix = convertToPostfix(equation);
 
             cout << "\n after convert : " << postfix;
             double Answer = calculate_postfix(postfix);
@@ -49,6 +49,9 @@ int main()
     return 0;
 }
 
+
+//+++++++++++++++++++++++++++
+// functions implementation: 
 
 int calculator(char ch, int a, int b)
 {
@@ -83,16 +86,10 @@ int priority(char c)
     return r;
 }
 
-bool myLetter(char c)
-{
-    if (c == 's' or c == 'c' or c == 't' or c == 'e' or c == 'P')
-        return true;
-    return false;
-}
 
 bool isOperator(char c)
 {
-    if (c == '/' or c == '*' or c == '+' or c == '-' or c == '^' or c == '=')
+    if (c == '/' or c == '*' or c == '+' or c == '-' or c == '^' )
         return true;
     return false;
 }
@@ -115,7 +112,7 @@ string fixString(string s)// add prototype and parameters
     Stack<char> parentheses;
     string result;
 
-
+    //check if parantheses are EVEN
     for (size_t i = 0; i < s.size(); ++i) 
     {
         if (s[i] == '(') 
@@ -151,8 +148,9 @@ string fixString(string s)// add prototype and parameters
                 if (s[j] == '-') minus++;
                 j++;
             }
-            i = j - 1; // Adjust loop index
+            i = j - 1; 
 
+            // handle minus sign if there was even number of them or not 
             if (minus % 2 == 1) {
                 if (!result.empty() && (result.back() == '*' || result.back() == '/' || result.back() == '^')) {
                     result += "(-";
@@ -160,7 +158,7 @@ string fixString(string s)// add prototype and parameters
                         result += s[i];
                     }
                     result += ')';
-                    i--; // Adjust loop index
+                    i--; 
                     continue;
                 }
                 result += '-';
@@ -175,7 +173,7 @@ string fixString(string s)// add prototype and parameters
         }
 
 
-        // Insert multiplication sign where necessary
+        // Insert '*' sign where necessary
         if (isdigit(s[i]) && (i + 1 < s.size()) && isalpha(s[i + 1])) {
             result += s[i];
             result += '*';
@@ -197,10 +195,10 @@ string fixString(string s)// add prototype and parameters
             continue;
         }
 
-        // handle the last operator exept = if exist
+        // handle the last operator except = if exist
         if (isOperator(s.back()))
         {
-            result  = "There is an ERROR !! there was a extra operator in the end  ";
+            result  = "There is an ERROR !! there was a extra operator in the end \n ";
             return result ;
         }
 
@@ -250,14 +248,13 @@ string convertToPostfix(string str)
                 ++i;
             }
             string numberStr = str.substr(start, i - start);
-            //double number = stod(numberStr);
             postfix += numberStr;
             postfix += ' ';
-            --i; // Adjust the index after the inner loop
+            --i; 
         }
     
 
-        // age  addae add toye string 
+        // if is number add in string 
         else if (str[i] == '(')
         {
             operators.push(str[i]);
